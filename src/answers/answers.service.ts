@@ -1,26 +1,46 @@
+/* eslint-disable prettier/prettier */
 import { Injectable } from '@nestjs/common';
-import { CreateAnswerDto } from './dto/create-answer.dto';
-import { UpdateAnswerDto } from './dto/update-answer.dto';
+import { PrismaService } from '../prisma.service';
+import { Answer, Prisma } from '@prisma/client';
 
 @Injectable()
 export class AnswersService {
-  create(createAnswerDto: CreateAnswerDto) {
-    return 'This action adds a new answer';
+  constructor(private prisma: PrismaService) {}
+
+  async create(data: Prisma.AnswerCreateInput): Promise<Answer | null> {
+    return await this.prisma.answer.create({ data });
   }
 
-  findAll() {
-    return `This action returns all answers`;
+  async findAll(params: {
+    skip?: number;
+    take?: number;
+    cursor?: Prisma.AnswerWhereUniqueInput;
+    where?: Prisma.AnswerWhereInput;
+    orderBy?: Prisma.AnswerOrderByWithRelationInput;
+  }): Promise<Answer[] | null> {
+    const { skip, take, cursor, where, orderBy } = params;
+    return await this.prisma.answer.findMany({
+      skip,
+      take,
+      cursor,
+      where,
+      orderBy,
+    });
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} answer`;
+  async findOne(id: number): Promise<Answer | null> {
+    return await this.prisma.answer.findFirst({ where: { id } });
   }
 
-  update(id: number, updateAnswerDto: UpdateAnswerDto) {
-    return `This action updates a #${id} answer`;
+  async update(
+    id: number,
+    data: Prisma.AnswerUpdateInput,
+  ): Promise<Answer | null> {
+    return await this.prisma.answer.update({ where: { id }, data });
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} answer`;
+  async remove(id: number): Promise<void> {
+    await this.prisma.answer.delete({ where: { id } });
+    return;
   }
 }

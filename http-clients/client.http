@@ -1,0 +1,137 @@
+@hostname = {{$dotenv HOSTNAME}}
+@port = {{$dotenv PORT}}
+@host = {{hostname}}:{{port}}
+
+### Health check
+# @name health_check
+GET {{host}}
+Content-Type: application/json
+
+
+### Create quiz
+# @name create_quiz
+POST {{host}}/quizzes
+Content-Type: application/json
+
+{
+	"title": "Quiz - React",
+	"description": "Chapter 1 quizzes for react course."
+}
+
+
+### Update quiz
+# @name update_quiz
+PATCH {{host}}/quizzes/2
+Content-Type: application/json
+
+{
+	"title": "Quiz 2 - React",
+	"description": "Chapter 2 quizzes for react course.",
+    "isCompleted": true,
+	"isPublished": true,
+	"score": 20
+}
+
+
+### Get quizzes
+# @name get_quizzes
+GET {{host}}/quizzes
+Content-Type: application/json
+
+
+### Get quiz
+# @name get_quiz
+GET {{host}}/quizzes/1
+Content-Type: application/json
+
+
+### Delete quiz
+# @name delete_quiz
+DELETE {{host}}/quizzes/1
+Content-Type: application/json
+
+
+### Create question
+# @name create_question
+POST {{host}}/questions
+Content-Type: application/json
+
+{
+	"question": "What is react hooks?",
+	"isMandatory": true,
+    "quiz": {"connect": {"id": 2}}
+}
+
+
+### Update question
+# @name update_question
+PATCH {{host}}/questions/1
+Content-Type: application/json
+
+{
+	"question": "What is react?",
+	"isMandatory": true,
+    "isPublished": true,
+    "quiz": {"connect": {"id": 2}}
+}
+
+
+### Get questions
+# @name get_questions
+GET {{host}}/questions
+Content-Type: application/json
+
+
+### Get question
+# @name get_question
+GET {{host}}/questions/2
+Content-Type: application/json
+
+
+### Delete question
+# @name delete_question
+DELETE {{host}}/questions/1
+Content-Type: application/json
+
+
+### Create answer
+# @name create_answer
+POST {{host}}/answers
+Content-Type: application/json
+
+{
+	"answer": "React is a UI tool.",
+	"isRight": true,
+    "question": {"connect": {"id": 2}}
+}
+
+
+### Update answer
+# @name update_answer
+PATCH {{host}}/answers/2
+Content-Type: application/json
+
+{
+	"answer": "React is a UI tool.",
+	"isRight": true,
+    "isPublished": true,
+    "question": {"connect": {"id": 2}}
+}
+
+
+### Get answers
+# @name get_answers
+GET {{host}}/answers
+Content-Type: application/json
+
+
+### Get answer
+# @name get_answer
+GET {{host}}/answers/2
+Content-Type: application/json
+
+
+### Delete answer
+# @name delete_answer
+DELETE {{host}}/answers/1
+Content-Type: application/json

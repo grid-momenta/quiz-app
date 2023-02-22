@@ -30,7 +30,7 @@ model Question {
   isMandatory Boolean  @default(true)
   isPublished Boolean  @default(false)
   quiz        Quiz     @relation(fields: [quizId], references: [id])
-  quizId      Int      @unique
+  quizId      Int
   answers     Answer[]
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
@@ -44,7 +44,7 @@ model Answer {
   isRight     Boolean  @default(false)
   isPublished Boolean  @default(false)
   question    Question @relation(fields: [questionId], references: [id])
-  questionId  Int      @unique
+  questionId  Int
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 

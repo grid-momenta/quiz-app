@@ -1,34 +1,84 @@
+/* eslint-disable prettier/prettier */
 import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
 import { AnswersService } from './answers.service';
-import { CreateAnswerDto } from './dto/create-answer.dto';
-import { UpdateAnswerDto } from './dto/update-answer.dto';
+import { Prisma } from '@prisma/client';
+import { errorRes, successRes } from 'src/responses';
+
 
 @Controller('answers')
 export class AnswersController {
   constructor(private readonly answersService: AnswersService) {}
 
   @Post()
-  create(@Body() createAnswerDto: CreateAnswerDto) {
-    return this.answersService.create(createAnswerDto);
+  async create(@Body() input: Prisma.AnswerCreateInput) {
+    try {
+      const data = await this.answersService.create(input);
+      if (data) {
+        return successRes(data);
+      } else {
+        return errorRes('Answer did not created');
+      }
+    } catch (error) {
+      console.log(error);
+      return errorRes('Something went wrong');
+    }
   }
 
   @Get()
-  findAll() {
-    return this.answersService.findAll();
+  async findAll() {
+    try {
+      const data = await this.answersService.findAll({});
+      if (data.length) {
+        return successRes(data);
+      } else {
+        return errorRes('Answer not found');
+      }
+    } catch (error) {
+      console.log(error);
+      return errorRes('Something went wrong');
+    }
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.answersService.findOne(+id);
+  async findOne(@Param('id') id: string) {
+    try {
+      const data = await this.answersService.findOne(+id);
+      if (data) {
+        return successRes(data);
+      } else {
+        return errorRes('Answer not found');
+      }
+    } catch (error) {
+      console.log(error);
+      return errorRes('Something went wrong');
+    }
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateAnswerDto: UpdateAnswerDto) {
-    return this.answersService.update(+id, updateAnswerDto);
+  async update(
+    @Param('id') id: string,
+    @Body() input: Prisma.AnswerUpdateInput,
+  ) {
+    try {
+      const data = await this.answersService.update(+id, input);
+      if (data) {
+        return successRes(data);
+      } else {
+        return errorRes('Answer did not update');
+      }
+    } catch (error) {
+      console.log(error);
+      return errorRes('Something went wrong');
+    }
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.answersService.remove(+id);
+  async remove(@Param('id') id: string) {
+    try {
+      return await this.answersService.remove(+id);
+    } catch (error) {
+      console.log(error);
+      return errorRes('Something went wrong');
+    }
   }
 }
